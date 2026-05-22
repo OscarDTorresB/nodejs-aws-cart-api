@@ -1,2 +1,7 @@
 allowBuilds:
   '@nestjs/core': true
+  esbuild: true
+  unrs-resolver: true
+packages:
+  - . # NestJS API
+  - infra # AWS CDK Infrastructure
