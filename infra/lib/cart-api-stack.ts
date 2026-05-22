@@ -1,12 +1,6 @@
 import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import {
-  aws_apigateway,
-  aws_ec2,
-  aws_lambda_nodejs,
-  aws_rds,
-  aws_secretsmanager,
-} from 'aws-cdk-lib';
+import { aws_apigateway, aws_ec2, aws_lambda_nodejs, aws_rds, aws_secretsmanager, } from 'aws-cdk-lib';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'node:path';
 import { InterfaceVpcEndpointAwsService } from 'aws-cdk-lib/aws-ec2';
@@ -72,7 +66,7 @@ export class CartApiStack extends Stack {
       {
         secretName: 'cart-db-credentials',
         generateSecretString: {
-          secretStringTemplate: JSON.stringify({ username: 'cloudx_admin' }),
+          secretStringTemplate: JSON.stringify({ username: 'cloudx_postgres' }),
           generateStringKey: 'password',
           excludePunctuation: true,
         },
@@ -99,6 +93,7 @@ export class CartApiStack extends Stack {
         allocatedStorage: 20,
         removalPolicy: RemovalPolicy.DESTROY,
         backupRetention: Duration.days(1),
+        databaseName: 'cloudx_postgres',
       },
     );
 
@@ -122,7 +117,11 @@ export class CartApiStack extends Stack {
             '@nestjs/microservices',
             'class-transformer',
             'class-validator',
+            'expo-sqlite',
           ],
+        },
+        environment: {
+          DB_SECRET_ARN: cartDbCredentialsSecret.secretArn,
         },
       },
     );
