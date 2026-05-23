@@ -4,14 +4,13 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 export enum CartStatuses {
   OPEN = 'OPEN',
-  STATUS = 'STATUS',
+  ORDERED = 'ORDERED',
 }
 
 @Entity()
@@ -56,12 +55,17 @@ export class CartEntity {
 
 @Entity()
 export class CartItemEntity {
-  @OneToOne(() => ProductEntity)
+  @PrimaryGeneratedColumn('increment')
+  id: number;
+
+  @ManyToOne(() => ProductEntity)
   product: ProductEntity;
 
   @Column('int')
   count: number;
 
-  @ManyToOne(() => CartEntity, (cart) => cart.items)
+  @ManyToOne(() => CartEntity, (cart) => cart.items, {
+    onDelete: 'CASCADE',
+  })
   cart: CartEntity;
 }

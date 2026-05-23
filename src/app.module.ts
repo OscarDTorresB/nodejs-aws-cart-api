@@ -24,7 +24,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         const secret = await secretsService.getSecret(
           process.env.DB_SECRET_ARN,
         );
-        const entities = ['dist/**/*.entity{.ts,.js}'];
 
         if (process.env.NODE_ENV === 'local') {
           return {
@@ -34,7 +33,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             username: 'cloudx-user',
             password: 'cloudx-password',
             database: 'cloudx-db',
-            entities,
+            autoLoadEntities: true,
             synchronize: true,
           };
         }
@@ -46,7 +45,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           username: secret.username,
           password: secret.password,
           database: secret.dbname,
-          entities,
+          autoLoadEntities: true,
           synchronize: true,
           ssl: {
             rejectUnauthorized: false,

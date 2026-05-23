@@ -140,9 +140,15 @@ export class CartApiStack extends Stack {
     const cartApiIntegration = new aws_apigateway.LambdaIntegration(
       cartApiLambda,
     );
+    const corsOptions: aws_apigateway.CorsOptions = {
+      allowOrigins: aws_apigateway.Cors.ALL_ORIGINS,
+      allowHeaders: aws_apigateway.Cors.DEFAULT_HEADERS,
+    };
     apiGateway.root.addMethod('ANY', cartApiIntegration);
+    apiGateway.root.addCorsPreflight(corsOptions);
     apiGateway.root.addProxy({
       defaultIntegration: cartApiIntegration,
+      defaultCorsPreflightOptions: corsOptions,
     });
   }
 }

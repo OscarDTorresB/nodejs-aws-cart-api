@@ -6,6 +6,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Put,
   Req,
   UseGuards,
@@ -21,7 +22,9 @@ import { CreateOrderDto, PutCartPayload } from 'src/order/type';
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
+    @Inject(CartService)
     private cartService: CartService,
+    @Inject(OrderService)
     private orderService: OrderService,
   ) {}
 
